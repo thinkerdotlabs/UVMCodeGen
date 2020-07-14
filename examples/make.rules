@@ -1,0 +1,40 @@
+
+PROJ_PATH = /data/projects/UVMCodeGen
+SCRIPT = ${PROJ_PATH}/scripts/uvmcodegen.py
+
+TEMPLATE_DIR = /data/projects/UVMCodeGen/templates/
+OUTPUT_DIR = ./
+
+IGNORE_MSG = --disable=C0301
+STYLES = --const-naming-style=snake_case
+STYLES += --variable-naming-style=snake_case
+STYLES += --class-naming-style=PascalCase
+STYLES += --function-naming-style=snake_case
+
+SRC = ${PROJ_PATH}/scripts/uvmcodegen.py
+SRC += ${PROJ_PATH}/scripts/box.py
+SRC += ${PROJ_PATH}/scripts/base_item_gen.py
+
+default: all
+
+all:
+	python3 ${SCRIPT} -datadir ${TEMPLATE_DATA_DIR} -tempdir ${TEMPLATE_DIR} -out ${OUTPUT_DIR} ${TRANS_DATA} ${TRANS_HDR_TEMPLATE} ${TRANS_IMPL_TEMPLATE}
+
+
+lint_check:
+	pylint ${IGNORE_MSG} ${STYLES} ${SRC}
+
+debug:
+	echo ${SCRIPT}
+	echo ${TEMPLATE_DIR}
+	echo ${OUTPUT_DIR}
+	echo ${trans_data}
+	echo ${trans_hdr_template}
+	echo ${trans_impl_template}
+
+clean:
+	rm *.sv
+	rm *.svh
+	rm run.log
+
+

@@ -1,0 +1,40 @@
+---- This is comment in data file, makes data file readable.
+{HEADER
+
+typedef enum bit {APB_READ,APB_WRITE} apb_direction_enum;
+typedef enum {ZERO,SHORT,MEDIUM,LONG,MAX} apb_dly_enum;
+
+}HEADER
+
+
+{CLASS 
+NAME apb_transfer
+EXTENDS uvm_sequence_item
+PARENT uvm_object
+PARAMETER1 none
+PARAMETER2 none
+}CLASS
+
+{ATTRIBUTE
+TYPE rand bit [31:0] 
+NAME addr
+POLICY UVM_DEFAULT
+}ATTRIBUTE
+
+{ATTRIBUTE
+TYPE rand real [31:0] 
+NAME percent
+POLICY none
+}ATTRIBUTE
+
+{ATTRIBUTE
+TYPE rand apb_dly_enum  
+NAME delay_kind
+POLICY UVM_DEFAULT | UVM_NOCOMPARE
+}ATTRIBUTE
+
+{CONSTRAINT
+constraint c_default_addr { addr[1:0] == 2'b00; }
+}CONSTRAINT
+
+  
