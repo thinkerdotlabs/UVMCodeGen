@@ -44,12 +44,36 @@ class BaseItemGen:
         self.class_name = self.class_name_and_parameters[0]
         self.class_extends = self.class_name_and_parameters[1]
         self.class_parent = self.class_name_and_parameters[2]
+        self.class_parameter_list = ''
+        self.class_parameter_valid = 0
+        if self.class_name_and_parameters[3] != 'none':
+            logger.debug(self.class_name_and_parameters[3])
+            self.class_parameter_list = '#(' + self.class_name_and_parameters[3]
+            self.class_parameter_valid = 1
+        if self.class_name_and_parameters[4] != 'none':
+            logger.debug(self.class_name_and_parameters[4])
+            self.class_parameter_list = self.class_parameter_list + self.class_name_and_parameters[4]
+        if self.class_parameter_valid:
+            self.class_parameter_list = self.class_parameter_list + ')'
+
+
         logger.debug(self.class_name_and_parameters)
 
         #add class name to dictionary
         self.item_dictionary.setdefault('class_name', self.class_name)
         self.item_dictionary.setdefault('class_extends', self.class_extends)
         self.item_dictionary.setdefault('class_parent', self.class_parent)
+        self.item_dictionary.setdefault('class_parameter_list', self.class_parameter_list)
+
+        #itrate filetered list and create interface lists that needs to be used in template file
+        self.vif_list = []
+        box.filter_vif_lines(self.filtered_content, self.vif_list)
+        self.item_dictionary.setdefault('class_vif_list', self.vif_list)
+
+        #itrate filetered list and create user methods lists that needs to be used in template file
+        self.methods_list = []
+        box.filter_methods_lines(self.filtered_content, self.methods_list)
+        self.item_dictionary.setdefault('class_methods_list', self.methods_list)
 
         # create class member data and utility and automation macros input data.
         self.class_data_list = []
@@ -62,6 +86,7 @@ class BaseItemGen:
         self.class_constraints_list = []
         box.filter_class_constraints(self.filtered_content, self.class_constraints_list)
         self.item_dictionary.setdefault('class_constraints_list', self.class_constraints_list)
+        logger.debug(self.class_constraints_list)
 
     def header_fname(self):
         '''

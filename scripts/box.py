@@ -43,6 +43,48 @@ def filter_header_lines(input_list, output_list):
             output_list.append(line)
 
 #
+# Filter input_list for lines to be inserted in class for 
+# methods (functions and task ) of class
+#
+def filter_methods_lines(input_list, output_list):
+    '''
+    Seperate methods declaration lines to be placed inside class declaration.
+    '''
+    #iterate main list and find for header lines
+    methods_found = 0
+    for line in input_list:
+        if '{METHODS' in line:
+            #we found start of interface declaration lines
+            methods_found = 1
+            continue
+        if '}METHODS' in line:
+            methods_found = 0
+        if methods_found:
+            logger.debug(line)
+            output_list.append(line)
+
+#
+# Filter input_list for lines to be inserted in class for 
+# virtual interface declaration
+#
+def filter_vif_lines(input_list, output_list):
+    '''
+    Seperate virtual interface declaration lines to be placed inside class declaration.
+    '''
+    #iterate main list and find for header lines
+    vif_found = 0
+    for line in input_list:
+        if '{VIF' in line:
+            #we found start of interface declaration lines
+            vif_found = 1
+            continue
+        if '}VIF' in line:
+            vif_found = 0
+        if vif_found:
+            logger.debug(line)
+            output_list.append(line)
+
+#
 # Filter class name from the list
 #
 def filter_class_name(input_list):
@@ -143,5 +185,7 @@ def filter_class_constraints(input_list, output_list):
             continue
         if '}CONSTRAINT' in line:
             constraint_found = 0
+            logger.debug("List of constraints")
+            logger.debug(output_list)
         if constraint_found:
             output_list.append(line)

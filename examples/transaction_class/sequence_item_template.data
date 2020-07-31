@@ -1,8 +1,8 @@
----- This is comment in data file, makes data file readable.
+---- This is comment in data file, makes data file readable. this will be filtered out
 {HEADER
 
 typedef enum bit {APB_READ,APB_WRITE} apb_direction_enum;
-typedef enum {ZERO,SHORT,MEDIUM,LONG,MAX} apb_dly_enum;
+typedef enum {ZERO=0,SHORT=4,MEDIUM=10,LONG=16,MAX=32} apb_dly_enum;
 
 }HEADER
 
@@ -17,15 +17,28 @@ PARAMETER2 none
 
 {ATTRIBUTE
 TYPE rand bit [31:0] 
-NAME addr
+NAME paddr
 POLICY UVM_DEFAULT
 }ATTRIBUTE
 
 {ATTRIBUTE
-TYPE rand real [31:0] 
-NAME percent
+TYPE rand bit 
+NAME pdirection
 POLICY none
 }ATTRIBUTE
+
+{ATTRIBUTE
+TYPE rand bit [31:0] 
+NAME prdata
+POLICY none
+}ATTRIBUTE
+
+{ATTRIBUTE
+TYPE rand bit [31:0] 
+NAME pwdata
+POLICY none
+}ATTRIBUTE
+
 
 {ATTRIBUTE
 TYPE rand apb_dly_enum  
@@ -33,8 +46,23 @@ NAME delay_kind
 POLICY UVM_DEFAULT | UVM_NOCOMPARE
 }ATTRIBUTE
 
+{ATTRIBUTE
+TYPE rand bit [7:0]  
+NAME delay_value
+POLICY UVM_DEFAULT | UVM_NOCOMPARE
+}ATTRIBUTE
+
 {CONSTRAINT
 constraint c_default_addr { addr[1:0] == 2'b00; }
+constraint c_default_delay_value { 
+	solve delay_kind before delay_value;
+	(delay_kind == ZERO) -> (delay_value == ZERO);
+	(delay_kind == SHORT) -> (delay_value inside {[1:SHORT]});
+	(delay_kind == MEDIUM) -> (delay_value inside {[SHORT:MEDIUM]});
+	(delay_kind == LONG) -> (delay_value inside {[MEDIUM:LONG]});
+	(delay_kind == MAX) -> (delay_value inside {[LONG:MAX]});
+	}
+constraint c_default_delay_kind { addr[1:0] == 2'b00; }
 }CONSTRAINT
 
   

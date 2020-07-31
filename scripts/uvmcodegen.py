@@ -64,12 +64,20 @@ def main():
 
     #use dictonary and template object to render code generation
     fname_header = output_directory + class_to_gen.header_fname()
-    fp_header = open(fname_header, "w+")
-    fp_header.write(header_template.render(attributes=class_to_gen.item_dictionary))
+    try:
+        fp_header = open(fname_header, "w+")
+    except OSError:
+        print("OSError: Could not open file for writing")
+    with fp_header:
+        fp_header.write(header_template.render(attributes=class_to_gen.item_dictionary))
 
     fname_implementation = output_directory + class_to_gen.impl_fname()
-    fp_header = open(fname_implementation, "w+")
-    fp_header.write(implementation_template.render(attributes=class_to_gen.item_dictionary))
+    try:
+        fp2_header = open(fname_implementation, "w+")
+    except OSError:
+        print("OSError: Could not open file for writing")
+    with fp2_header:
+        fp2_header.write(implementation_template.render(attributes=class_to_gen.item_dictionary))
 
 if __name__ == "__main__":
     #

@@ -39,7 +39,7 @@ ${line};
 //Constraints
 //
 % for line in  class_constraints_list:
-${line};
+${line}
 % endfor
 
 //
