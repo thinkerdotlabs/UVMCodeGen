@@ -1,0 +1,32 @@
+---- This is comment in data file, makes data file readable. this will be filtered out
+{HEADER
+}HEADER
+
+----PARAMETER1 apb_transfer
+----PARAMETER2 none
+
+{CLASS 
+NAME apb_slave_driver
+EXTENDS uvm_driver
+PARENT uvm_component
+PARAMETER1 apb_transfer
+PARAMETER2 none 
+}CLASS
+
+{VIF
+virtual apb_interface apb_vif
+virtual apb_interface2 apb_vif2
+virtual apb_interface3 apb_vif4
+}VIF
+
+{ATTRIBUTE
+}ATTRIBUTE
+
+{CONSTRAINT
+}CONSTRAINT
+
+{METHODS
+extern virtual task respond_to_transfer(apb_transfer resp)
+}METHODS
+
+  
